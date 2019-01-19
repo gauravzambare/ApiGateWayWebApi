@@ -20,15 +20,13 @@ namespace ApiGateWayWebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            var builder = new Microsoft.Extensions.Configuration.ConfigurationBuilder();
+            builder.SetBasePath(env.ContentRootPath)
+                   //add configuration.json  
+                   .AddJsonFile("configuration.json", optional: false, reloadOnChange: true)
+                   .AddEnvironmentVariables();
 
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello World!");
-            });
+            Configuration = builder.Build();
         }
     }
 }
